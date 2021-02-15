@@ -58,10 +58,30 @@ Usage
 See [Extensions](index.md) for general extension usage. Use `tables` as the
 name of the extension.
 
-This extension does not accept any special configuration options.
+See the [Library Reference](../reference.md#extensions) for information about
+configuring extensions.
+
+The following options are provided to change the default behavior:
+
+* **`use_align_attribute`**: Set to `True` to use `align` instead of an appropriate `style` attribute
+
+    Default: `'False'`
+
 
 A trivial example:
 
 ```python
 markdown.markdown(some_text, extensions=['tables'])
+```
+
+### Examples
+
+For an example, let us suppose that alignment should be controlled by the legacy `align`
+attribute.
+
+```pycon
+>>> from markdown.extensions.tables import TableExtension
+>>> html = markdown.markdown(text,
+...                 extensions=[TableExtension(use_align_attribute=True)]
+... )
 ```

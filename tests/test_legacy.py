@@ -182,8 +182,6 @@ class TestExtensionsExtra(LegacyTestCase):
 
     footnotes = Kwargs(extensions=['footnotes'])
 
-    tables = Kwargs(extensions=['tables'])
-
     extra_config = Kwargs(
         extensions=['extra'],
         extension_configs={
