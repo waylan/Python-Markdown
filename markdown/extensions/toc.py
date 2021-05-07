@@ -247,6 +247,7 @@ class TocTreeprocessor(Treeprocessor):
             for item in toc_list:
                 # List item link, to be inserted into the toc div
                 li = etree.SubElement(ul, "li")
+                li.attrib["class"] = "toc" + str(item.get('level'))
                 link = etree.SubElement(li, "a")
                 link.text = item.get('name', '')
                 link.attrib["href"] = '#' + item.get('id', '')

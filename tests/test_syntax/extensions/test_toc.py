@@ -125,14 +125,14 @@ class TestTOC(TestCase):
             expected_attrs={
                 'toc': (
                     '<div class="toc">\n'
-                      '<ul>\n'                                             # noqa
-                        '<li><a href="#header-3">Header 3</a>'             # noqa
-                          '<ul>\n'                                         # noqa
-                            '<li><a href="#header-4">Header 4</a></li>\n'  # noqa
-                          '</ul>\n'                                        # noqa
-                        '</li>\n'                                          # noqa
-                      '</ul>\n'                                            # noqa
-                    '</div>\n'                                             # noqa
+                      '<ul>\n'                                                          # noqa
+                        '<li class="toc3"><a href="#header-3">Header 3</a>'             # noqa
+                          '<ul>\n'                                                      # noqa
+                            '<li class="toc4"><a href="#header-4">Header 4</a></li>\n'  # noqa
+                          '</ul>\n'                                                     # noqa
+                        '</li>\n'                                                       # noqa
+                      '</ul>\n'                                                         # noqa
+                    '</div>\n'                                                          # noqa
                 ),
                 'toc_tokens': [
                     {
@@ -174,14 +174,14 @@ class TestTOC(TestCase):
             expected_attrs={
                 'toc': (
                     '<div class="toc">\n'
-                      '<ul>\n'                                             # noqa
-                        '<li><a href="#header-1">Header 1</a>'             # noqa
-                          '<ul>\n'                                         # noqa
-                            '<li><a href="#header-2">Header 2</a></li>\n'  # noqa
-                          '</ul>\n'                                        # noqa
-                        '</li>\n'                                          # noqa
-                      '</ul>\n'                                            # noqa
-                    '</div>\n'                                             # noqa
+                      '<ul>\n'                                                          # noqa
+                        '<li class="toc1"><a href="#header-1">Header 1</a>'             # noqa
+                          '<ul>\n'                                                      # noqa
+                            '<li class="toc2"><a href="#header-2">Header 2</a></li>\n'  # noqa
+                          '</ul>\n'                                                     # noqa
+                        '</li>\n'                                                       # noqa
+                      '</ul>\n'                                                         # noqa
+                    '</div>\n'                                                          # noqa
                 ),
                 'toc_tokens': [
                     {
@@ -230,14 +230,14 @@ class TestTOC(TestCase):
             expected_attrs={
                 'toc': (
                     '<div class="toc">\n'
-                      '<ul>\n'                                             # noqa
-                        '<li><a href="#header-3">Header 3</a>'             # noqa
-                          '<ul>\n'                                         # noqa
-                            '<li><a href="#header-4">Header 4</a></li>\n'  # noqa
-                          '</ul>\n'                                        # noqa
-                        '</li>\n'                                          # noqa
-                      '</ul>\n'                                            # noqa
-                    '</div>\n'                                             # noqa
+                      '<ul>\n'                                                          # noqa
+                        '<li class="toc3"><a href="#header-3">Header 3</a>'             # noqa
+                          '<ul>\n'                                                      # noqa
+                            '<li class="toc4"><a href="#header-4">Header 4</a></li>\n'  # noqa
+                          '</ul>\n'                                                     # noqa
+                        '</li>\n'                                                       # noqa
+                      '</ul>\n'                                                         # noqa
+                    '</div>\n'                                                          # noqa
                 ),
                 'toc_tokens': [
                     {
@@ -286,14 +286,14 @@ class TestTOC(TestCase):
             expected_attrs={
                 'toc': (
                     '<div class="toc">\n'
-                      '<ul>\n'                                             # noqa
-                        '<li><a href="#header-3">Header 3</a>'             # noqa
-                          '<ul>\n'                                         # noqa
-                            '<li><a href="#header-4">Header 4</a></li>\n'  # noqa
-                          '</ul>\n'                                        # noqa
-                        '</li>\n'                                          # noqa
-                      '</ul>\n'                                            # noqa
-                    '</div>\n'                                             # noqa
+                      '<ul>\n'                                                          # noqa
+                        '<li class="toc3"><a href="#header-3">Header 3</a>'             # noqa
+                          '<ul>\n'                                                      # noqa
+                            '<li class="toc4"><a href="#header-4">Header 4</a></li>\n'  # noqa
+                          '</ul>\n'                                                     # noqa
+                        '</li>\n'                                                       # noqa
+                      '</ul>\n'                                                         # noqa
+                    '</div>\n'                                                          # noqa
                 ),
                 'toc_tokens': [
                     {
@@ -338,14 +338,14 @@ class TestTOC(TestCase):
             expected_attrs={
                 'toc': (
                     '<div class="toc">\n'
-                      '<ul>\n'                                                  # noqa
-                        '<li><a href="#second-level">Second Level</a>'          # noqa
-                          '<ul>\n'                                              # noqa
-                            '<li><a href="#third-level">Third Level</a></li>\n' # noqa
-                          '</ul>\n'                                             # noqa
-                        '</li>\n'                                               # noqa
-                      '</ul>\n'                                                 # noqa
-                    '</div>\n'                                                  # noqa
+                      '<ul>\n'                                                                  # noqa
+                        '<li class="toc4"><a href="#second-level">Second Level</a>'             # noqa
+                          '<ul>\n'                                                              # noqa
+                            '<li class="toc5"><a href="#third-level">Third Level</a></li>\n'    # noqa
+                          '</ul>\n'                                                             # noqa
+                        '</li>\n'                                                               # noqa
+                      '</ul>\n'                                                                 # noqa
+                    '</div>\n'                                                                  # noqa
                 ),
                 'toc_tokens': [
                     {
@@ -387,14 +387,14 @@ class TestTOC(TestCase):
             expected_attrs={
                 'toc': (
                     '<div class="toc">\n'
-                      '<ul>\n'                                                 # noqa
-                        '<li><a href="#some-header">Some Header</a>'           # noqa
-                          '<ul>\n'                                             # noqa
-                            '<li><a href="#next-level">Next Level</a></li>\n'  # noqa
-                          '</ul>\n'                                            # noqa
-                        '</li>\n'                                              # noqa
-                      '</ul>\n'                                                # noqa
-                    '</div>\n'                                                 # noqa
+                      '<ul>\n'                                                              # noqa
+                        '<li class="toc2"><a href="#some-header">Some Header</a>'           # noqa
+                          '<ul>\n'                                                          # noqa
+                            '<li class="toc3"><a href="#next-level">Next Level</a></li>\n'  # noqa
+                          '</ul>\n'                                                         # noqa
+                        '</li>\n'                                                           # noqa
+                      '</ul>\n'                                                             # noqa
+                    '</div>\n'                                                              # noqa
                 ),
                 'toc_tokens': [
                     {
@@ -428,7 +428,7 @@ class TestTOC(TestCase):
                 '''
                 <div class="toc">
                 <ul>
-                <li><a href="#test">&lt;test&gt;</a></li>
+                <li class="toc1"><a href="#test">&lt;test&gt;</a></li>
                 </ul>
                 </div>
                 <h1 id="test"><code>&lt;test&gt;</code></h1>

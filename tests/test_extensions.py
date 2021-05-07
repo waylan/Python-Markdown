@@ -322,13 +322,13 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             self.md.convert(text),
             '<div class="toc">\n'
-              '<ul>\n'                                             # noqa
-                '<li><a href="#header-1">Header 1</a>'             # noqa
-                  '<ul>\n'                                         # noqa
-                    '<li><a href="#header-2">Header 2</a></li>\n'  # noqa
-                  '</ul>\n'                                        # noqa
-                '</li>\n'                                          # noqa
-              '</ul>\n'                                            # noqa
+              '<ul>\n'                                                          # noqa
+                '<li class="toc1"><a href="#header-1">Header 1</a>'             # noqa
+                  '<ul>\n'                                                      # noqa
+                    '<li class="toc2"><a href="#header-2">Header 2</a></li>\n'  # noqa
+                  '</ul>\n'                                                     # noqa
+                '</li>\n'                                                       # noqa
+              '</ul>\n'                                                         # noqa
             '</div>\n'
             '<h1 id="header-1">Header 1</h1>\n'
             '<h2 id="header-2">Header 2</h2>'
@@ -345,13 +345,13 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             self.md.toc,
             '<div class="toc">\n'
-              '<ul>\n'                                             # noqa
-                '<li><a href="#header-1">Header 1</a>'             # noqa
-                  '<ul>\n'                                         # noqa
-                    '<li><a href="#header-2">Header 2</a></li>\n'  # noqa
-                  '</ul>\n'                                        # noqa
-                '</li>\n'                                          # noqa
-              '</ul>\n'                                            # noqa
+              '<ul>\n'                                                          # noqa
+                '<li class="toc1"><a href="#header-1">Header 1</a>'             # noqa
+                  '<ul>\n'                                                      # noqa
+                    '<li class="toc2"><a href="#header-2">Header 2</a></li>\n'  # noqa
+                  '</ul>\n'                                                     # noqa
+                '</li>\n'                                                       # noqa
+              '</ul>\n'                                                         # noqa
             '</div>\n'
         )
 
@@ -364,13 +364,13 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             md.convert(text),
             '<div class="toc">\n'
-              '<ul>\n'                                             # noqa
-                '<li><a href="#header-1">Header 1</a>'             # noqa
-                  '<ul>\n'                                         # noqa
-                    '<li><a href="#header-2">Header 2</a></li>\n'  # noqa
-                  '</ul>\n'                                        # noqa
-                '</li>\n'                                          # noqa
-              '</ul>\n'                                            # noqa
+              '<ul>\n'                                                          # noqa
+                '<li class="toc1"><a href="#header-1">Header 1</a>'             # noqa
+                  '<ul>\n'                                                      # noqa
+                    '<li class="toc2"><a href="#header-2">Header 2</a></li>\n'  # noqa
+                  '</ul>\n'                                                     # noqa
+                '</li>\n'                                                       # noqa
+              '</ul>\n'                                                         # noqa
             '</div>\n'
             '<h1 id="header-1">Header 1</h1>\n'
             '<h2 id="header-2">Header 2</h2>'
@@ -412,11 +412,11 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             self.md.toc,
             '<div class="toc">\n'
-              '<ul>\n'                                       # noqa
-                '<li><a href="#header">Header</a></li>\n'    # noqa
-                '<li><a href="#header_1">Header</a></li>\n'  # noqa
-                '<li><a href="#header_2">Header</a></li>\n'  # noqa
-              '</ul>\n'                                      # noqa
+              '<ul>\n'                                                      # noqa
+                '<li class="toc1"><a href="#header">Header</a></li>\n'      # noqa
+                '<li class="toc1"><a href="#header_1">Header</a></li>\n'    # noqa
+                '<li class="toc1"><a href="#header_2">Header</a></li>\n'    # noqa
+              '</ul>\n'                                                     # noqa
             '</div>\n'
         )
         self.assertEqual(self.md.toc_tokens, [
@@ -435,9 +435,9 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             self.md.toc,
             '<div class="toc">\n'
-              '<ul>\n'                                             # noqa
-                '<li><a href="#foo-bar">Foo &amp; bar</a></li>\n'  # noqa
-              '</ul>\n'                                            # noqa
+              '<ul>\n'                                                          # noqa
+                '<li class="toc1"><a href="#foo-bar">Foo &amp; bar</a></li>\n'  # noqa
+              '</ul>\n'                                                         # noqa
             '</div>\n'
         )
         self.assertEqual(self.md.toc_tokens, [
@@ -454,9 +454,9 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             self.md.toc,
             '<div class="toc">\n'
-              '<ul>\n'                                                  # noqa
-                '<li><a href="#foo-bar">Foo &gt; &amp; bar</a></li>\n'  # noqa
-              '</ul>\n'                                                 # noqa
+              '<ul>\n'                                                                  # noqa
+                '<li class="toc1"><a href="#foo-bar">Foo &gt; &amp; bar</a></li>\n'     # noqa
+              '</ul>\n'                                                                 # noqa
             '</div>\n'
         )
         self.assertEqual(self.md.toc_tokens, [
@@ -473,9 +473,9 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             self.md.toc,
             '<div class="toc">\n'
-              '<ul>\n'                                                # noqa
-                '<li><a href="#foo-bar-baz">Foo Bar Baz.</a></li>\n'  # noqa
-              '</ul>\n'                                               # noqa
+              '<ul>\n'                                                              # noqa
+                '<li class="toc1"><a href="#foo-bar-baz">Foo Bar Baz.</a></li>\n'   # noqa
+              '</ul>\n'                                                             # noqa
             '</div>\n'
         )
         self.assertEqual(self.md.toc_tokens, [
@@ -497,14 +497,14 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             md.toc,
             '<div class="toc">\n'
-              '<ul>\n'                                                 # noqa
-                '<li><a href="#some-header">Some Header</a>'           # noqa
-                  '<ul>\n'                                             # noqa
-                    '<li><a href="#next-level">Next Level</a></li>\n'  # noqa
-                    '<li><a href="#too-high">Too High</a></li>\n'      # noqa
-                  '</ul>\n'                                            # noqa
-                '</li>\n'                                              # noqa
-              '</ul>\n'                                                # noqa
+              '<ul>\n'                                                              # noqa
+                '<li class="toc5"><a href="#some-header">Some Header</a>'           # noqa
+                  '<ul>\n'                                                          # noqa
+                    '<li class="toc6"><a href="#next-level">Next Level</a></li>\n'  # noqa
+                    '<li class="toc6"><a href="#too-high">Too High</a></li>\n'      # noqa
+                  '</ul>\n'                                                         # noqa
+                '</li>\n'                                                           # noqa
+              '</ul>\n'                                                             # noqa
             '</div>\n'
         )
         self.assertEqual(md.toc_tokens, [
@@ -526,10 +526,10 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             self.md.toc,
             '<div class="toc">\n'
-              '<ul>\n'                                     # noqa
-                '<li><a href="#some-header-with-markup">'  # noqa
-                  'Some Header with markup.</a></li>\n'    # noqa
-              '</ul>\n'                                    # noqa
+              '<ul>\n'                                                  # noqa
+                '<li class="toc1"><a href="#some-header-with-markup">'  # noqa
+                  'Some Header with markup.</a></li>\n'                 # noqa
+              '</ul>\n'                                                 # noqa
             '</div>\n'
         )
         self.assertEqual(self.md.toc_tokens, [
@@ -567,16 +567,16 @@ class TestTOC(TestCaseWithAssertStartsWith):
         self.assertEqual(
             md.toc,
             '<div class="toc">\n'
-              '<ul>\n'                                             # noqa
-                '<li><a href="#header-1">Header 1</a>'             # noqa
-                  '<ul>\n'                                         # noqa
-                    '<li><a href="#foo">Header 2</a></li>\n'       # noqa
-                    '<li><a href="#header-3">Foo Bar</a></li>\n'   # noqa
-                  '</ul>\n'                                        # noqa
-                '</li>\n'                                          # noqa
-                '<li><a href="#header-4">Foo &gt; Baz</a></li>\n'  # noqa
-                '<li><a href="#header-5">Foo Quux</a></li>\n'      # noqa
-              '</ul>\n'                                            # noqa
+              '<ul>\n'                                                          # noqa
+                '<li class="toc1"><a href="#header-1">Header 1</a>'             # noqa
+                  '<ul>\n'                                                      # noqa
+                    '<li class="toc2"><a href="#foo">Header 2</a></li>\n'       # noqa
+                    '<li class="toc2"><a href="#header-3">Foo Bar</a></li>\n'   # noqa
+                  '</ul>\n'                                                     # noqa
+                '</li>\n'                                                       # noqa
+                '<li class="toc1"><a href="#header-4">Foo &gt; Baz</a></li>\n'  # noqa
+                '<li class="toc1"><a href="#header-5">Foo Quux</a></li>\n'      # noqa
+              '</ul>\n'                                                         # noqa
             '</div>\n'
         )
         self.assertEqual(md.toc_tokens, [
@@ -600,34 +600,34 @@ class TestTOC(TestCaseWithAssertStartsWith):
         text = '[TOC]\n#[TOC]'
         self.assertEqual(
             self.md.convert(text),
-            '<div class="toc">\n'                       # noqa
-              '<ul>\n'                                  # noqa
-                '<li><a href="#toc">[TOC]</a></li>\n'   # noqa
-              '</ul>\n'                                 # noqa
-            '</div>\n'                                  # noqa
-            '<h1 id="toc">[TOC]</h1>'                   # noqa
+            '<div class="toc">\n'                                   # noqa
+              '<ul>\n'                                              # noqa
+                '<li class="toc1"><a href="#toc">[TOC]</a></li>\n'  # noqa
+              '</ul>\n'                                             # noqa
+            '</div>\n'                                              # noqa
+            '<h1 id="toc">[TOC]</h1>'                               # noqa
         )
 
         text = '#[TOC]\n[TOC]'
         self.assertEqual(
             self.md.convert(text),
-            '<h1 id="toc">[TOC]</h1>\n'                 # noqa
-            '<div class="toc">\n'                       # noqa
-              '<ul>\n'                                  # noqa
-                '<li><a href="#toc">[TOC]</a></li>\n'   # noqa
-              '</ul>\n'                                 # noqa
-            '</div>'                                    # noqa
+            '<h1 id="toc">[TOC]</h1>\n'                             # noqa
+            '<div class="toc">\n'                                   # noqa
+              '<ul>\n'                                              # noqa
+                '<li class="toc1"><a href="#toc">[TOC]</a></li>\n'  # noqa
+              '</ul>\n'                                             # noqa
+            '</div>'                                                # noqa
         )
 
         text = '[TOC]\n# *[TOC]*'
         self.assertEqual(
             self.md.convert(text),
-            '<div class="toc">\n'                       # noqa
-              '<ul>\n'                                  # noqa
-                '<li><a href="#toc">[TOC]</a></li>\n'   # noqa
-              '</ul>\n'                                 # noqa
-            '</div>\n'                                  # noqa
-            '<h1 id="toc"><em>[TOC]</em></h1>'          # noqa
+            '<div class="toc">\n'                                   # noqa
+              '<ul>\n'                                              # noqa
+                '<li class="toc1"><a href="#toc">[TOC]</a></li>\n'  # noqa
+              '</ul>\n'                                             # noqa
+            '</div>\n'                                              # noqa
+            '<h1 id="toc"><em>[TOC]</em></h1>'                      # noqa
         )
 
 

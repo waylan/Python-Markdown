@@ -87,6 +87,9 @@ The following new features have been included in the 3.3 release:
   `markdown.extensions.headerid.slugify_unicode` to the `slugify` configuration option
   to use the new behavior.
 
+* A table of contents level class has been added to the [Table of Contents](../extensions/toc.md)
+  extension, e.g. class="toc1". This allows for individual styling for each table of contents level.
+
 * Support was added for Python 3.9 and dropped for Python 3.5.
 
 ## Bug fixes
