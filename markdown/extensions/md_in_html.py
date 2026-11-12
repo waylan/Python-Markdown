@@ -446,6 +446,7 @@ class MarkdownInHtmlExtension(Extension):
         # flake8: noqa: E501 429-433
         # Replace raw HTML preprocessor
         md.preprocessors.register(HtmlBlockPreprocessor(md), 'html_block', 20)
+        md.parser.blockprocessors['rawhtml'].extractor = HTMLExtractorExtra
         # Add `blockprocessor` which handles the placeholders for `etree` elements
         md.parser.blockprocessors.register(
             MarkdownInHtmlProcessor(md.parser), 'markdown_block', 105

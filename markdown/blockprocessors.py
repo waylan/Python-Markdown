@@ -43,6 +43,7 @@ def build_block_parser(md: Markdown, **kwargs: Any) -> BlockParser:
     """ Build the default block parser used by Markdown. """
     parser = BlockParser(md)
     parser.blockprocessors.register(EmptyBlockProcessor(parser), 'empty', 100)
+    parser.blockprocessors.register(RawHtmlBlockProcessor(parser), 'rawhtml', 95)
     parser.blockprocessors.register(ListIndentProcessor(parser), 'indent', 90)
     parser.blockprocessors.register(CodeBlockProcessor(parser), 'code', 80)
     parser.blockprocessors.register(HashHeaderProcessor(parser), 'hashheader', 70)
@@ -148,6 +149,154 @@ class BlockProcessor:
             blocks: A list of all remaining blocks of the document.
         """
         pass  # pragma: no cover
+
+    def finish(self) -> None:
+        """ Called when the outermost call to the parser is done. Does nothing unless overridden.
+
+        A processor which holds on to blocks, to decide what to do with them once it has seen the next, must
+        release them here: this is the last the parser will hand it for the parents involved.
+        """
+        pass
+
+
+class HeldBlocks(list):
+    """ Blocks which are held back until it is known whether they are raw HTML, and the parser state they are in. """
+
+    def __init__(self, blocks: list[str], state: list):
+        super().__init__(blocks)
+        self.state = list(state)
+
+
+class RawHtmlBlockProcessor(BlockProcessor):
+    """
+    Extract raw HTML blocks nested in a container.
+
+    The preprocessor can only extract a raw block that is at the start of a line. Within a container (a list item,
+    an admonition, a blockquote, etc.) the block is indented or quoted, which can not be told apart from an indented
+    code block or a paragraph until the container has removed its indentation or markers. At that point the block
+    starts a block of text and is extracted here.
+
+    Containers pass their content on a block at a time, so a raw block with blank lines in it is collected across
+    calls until it is closed. Anything still open when the parser is done is handled in
+    [`finish`][markdown.blockprocessors.RawHtmlBlockProcessor.finish].
+    """
+
+    START_RE = re.compile(r'^[ ]{0,3}(?:<!--|<\?|<![A-Za-z\[]|<([A-Za-z][\w:-]*))')
+    # Constructs which the extractor can not be given a piece at a time: a comment, processing instruction, `CDATA`
+    # section or declaration, and what ends each of them.
+    UNTERMINATED_RE = re.compile(r'^[ ]{0,3}(?:(<!--)|(<\?)|(<!\[CDATA\[)|(<![A-Za-z\[]))')
+    TERMINATORS = (re.compile(r'--!?>'), re.compile(r'>'), re.compile(r']]>'), re.compile(r'>'))
+
+    def __init__(self, parser: BlockParser):
+        super().__init__(parser)
+        self.extractor = None
+        # Per container: the extractor of a raw block that is still open, or the blocks of a comment that is.
+        self.open: dict[etree.Element, Any] = {}
+        self.flushing = False
+        self._root: etree.Element | None = None
+
+    def get_extractor(self):
+        """ Get an extractor to collect a raw block with. """
+        from .htmlparser import HTMLExtractor
+        return (self.extractor or HTMLExtractor)(self.parser.md)
+
+    def starts_raw(self, block: str) -> bool:
+        """ Does `block` start with something the HTML extractor treats as a raw block? """
+        m = self.START_RE.match(block)
+        return bool(m) and (m.group(1) is None or self.parser.md.is_block_level(m.group(1).lower()))
+
+    def test(self, parent: etree.Element, block: str) -> bool:
+        """ Is this the start of a raw block, or a block of one that is still open in `parent`? """
+        if self.flushing:
+            return False
+        root = getattr(self.parser, 'root', None)
+        if self._root is not root:
+            # A new document. Discard anything a document that failed to parse left behind.
+            self._root = root
+            self.open = {}
+        if parent in self.open:
+            return True
+        if self.parser.state.isstate('list') or self.parser.state.isstate('looselist'):
+            # What follows the marker of a list item or definition is parsed as it always has been.
+            return False
+        return self.starts_raw(block)
+
+    def unterminated(self, text: str) -> bool:
+        """ Does `text` start a comment, processing instruction, `CDATA` section or declaration it does not end? """
+        m = self.UNTERMINATED_RE.match(text)
+        return bool(m) and not self.TERMINATORS[m.lastindex - 1].search(text, m.end())
+
+    @staticmethod
+    def closed(extractor) -> bool:
+        """ Has the extractor closed everything it has been fed? """
+        return not extractor.inraw and not getattr(extractor, 'mdstack', None)
+
+    def run(self, parent: etree.Element, blocks: list[str]) -> bool | None:
+        """ Feed the block to the extractor and, once the raw block is closed, replace it with its placeholder. """
+        block = blocks.pop(0)
+        original = [block]
+        extractor = self.open.get(parent)
+        if isinstance(extractor, HeldBlocks):
+            # A comment (or similar) with a blank line in it. The extractor is given nothing until it is closed.
+            extractor.append(block)
+            original = list(extractor)
+            block = '\n\n'.join(original)
+            if self.unterminated(block):
+                return True
+            del self.open[parent]
+            extractor = None
+        elif extractor is None and parent is not self.parser.root and self.unterminated(block):
+            self.open[parent] = HeldBlocks(original, self.parser.state)
+            return True
+        if extractor is None:
+            extractor = self.get_extractor()
+            feed = block
+        else:
+            feed = '\n\n' + block
+        extractor.feed(feed)
+        if not self.closed(extractor):
+            self.open[parent] = extractor
+            return True
+        self.open.pop(parent, None)
+        result = self.collect(extractor)
+        if result == block.strip('\n').split('\n\n'):
+            # Not something the extractor treats as raw HTML (a bogus comment, for example)
+            blocks[0:0] = original
+            return False
+        blocks[0:0] = result
+        return True
+
+    @staticmethod
+    def collect(extractor) -> list[str]:
+        """ Get the blocks that replace the text fed to the extractor. """
+        extractor.close()
+        return ''.join(extractor.cleandoc).strip('\n').split('\n\n')
+
+    def finish(self) -> None:
+        """ Parse what is left in each container: a raw block which was never closed, or a comment which was not. """
+        if not self.open:
+            return
+        pending, self.open = self.open, {}
+        state = self.parser.state
+        self.flushing = True
+        try:
+            for parent, item in pending.items():
+                if isinstance(item, HeldBlocks):
+                    # Parse the blocks as they would have been had they never been held. A list item hands the
+                    # blocks of its content on one at a time, each in its own `detabbed` state, so they are not
+                    # parsed in that state all at once.
+                    names = [name for name in item.state if name != 'detabbed']
+                    for name in names:
+                        state.set(name)
+                    try:
+                        self.parser.parseBlocks(parent, list(item))
+                    finally:
+                        for _ in names:
+                            state.reset()
+                else:
+                    self.parser.parseBlocks(parent, self.collect(item))
+        finally:
+            self.flushing = False
 
 
 class ListIndentProcessor(BlockProcessor):

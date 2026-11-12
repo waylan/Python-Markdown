@@ -71,6 +71,10 @@ See the [Contributing Guide](contributing.md) for details.
   provided, rather than rendering them as `key="key"`, so the same source
   renders consistently under both the `html` and `xhtml` output formats
   (#1501).
+* Treat a block-level raw HTML tag indented by more than three spaces as a raw
+  HTML block when it is nested in a containing block (a list item, an
+  admonition, etc.), instead of splitting it into paragraphs at blank lines.
+  Within an indented code block such HTML is still rendered as code (#1096).
 
 ## [3.11.2] - 2026-10-19
 
